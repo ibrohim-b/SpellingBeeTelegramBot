@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "studied-stock-410006",
+  "private_key_id": "2a959db203971985d79715d561316a48aa32fe9a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCoBE6ZZ6p/z1zu\nBDfWwWssw6uSQjCUZh0yueZUTRIPeyDPzgn8bq8jorJffLBDd+2c6vyJgR+NPKDP\niIiaArpjsyw/8xJTPkNzxdOSVbjS4Py0kzktzl65qgbL3F6shIyVrdCA2/7ua4s9\nhB8D9Ml3ps9FyVmZFT/NUAnz7zWz/EV8vrCcr5cw/lEWePMWKYKfRivT6aznaqDL\nheHxK7XcbgGf6tleKLQca/9aUSICJ30vlMB1Z0Fk1nYQIEDH/aeBOR/vKO9TJpsI\nYztPfx1aiRoiRF3IYQG8jA5iIyQDhn/fKxcFfTd6JLUdZpqhVRSrb0SvMQ7wapwi\nsO3uRvo9AgMBAAECggEAAvWYdiaXn+AE0K3DAgWuypS5DT7HNkXvgQ452rBE1NWk\nB/pRaLXWYI1Ou6nUPPamznBrzvbhmbjrUtx3yNFVe8i9yx6P6xFvWgxY+VHd4IZV\nTSTus+TXpvOHYnMuOQxYoZD0hDXbxqf0RZAchRL8XXQoYHVMc7V7xd+sB9+Qauwg\n7cDKGUcdvHT2ziZMI4bxMg1RsujJsl9blNlzXn/+KMuPqxzaZ1tY1QdU6f3MzOyR\nBpxP0g6pXD6iYdkZwLqOGhjwXL9fwjgAsVhEgj4XwLtnHSnMg+blqa8N3CvU03cW\nmxRUwEg86G+YAlF6KW8IMhau7beEb/svCkQszH9UQQKBgQDjMqqhwg8AORA63ofY\nawwd2lV+0ZEq0yZQQIazfyOnJvakzSZxZJVHzDWOoHGKjKy8IvztonGyqC235w7A\n4VWpDz9NVr3dOEABGquS18lbtThO7Cjs9HkaIcULLn9KeOZqHGXaQ47jFq9DKwQu\ngsPjP+rG93TklS3v3iSpnOuAjQKBgQC9UQQMnxIPfGUe6pgb9sue8vRtYjELw8BL\nxA8srqShfuXsrbB62lx0lV6YDlvBuxvYqmurRECSdDbofGv/YmlFC82pakYk5fMw\nI8PQa+WDN/JtM6/g0MiVWIevw9xnCnWi/jg6LpopXOqEOcLvWtivp/DJU9aYnWjN\nEHUdNecscQKBgBogCV7wYak05pjeXeCU7p/AK3SZxIeYIB+6S8L4K7Fc2Z+5t2Hy\nnvfSk5YC/QthgbtgipUIyOoyTI+JEjk7sA3woubRwqNdhH6cAn6wMYdKH19z6IDW\n29YVbAMNJbX6kQRCn7OpcRTL1vtyRtjSUJQhFW4rplVikhWzBaQ7VxlBAoGAM6Qm\n256Ema7QEqfhiDdBAgG6BSB0yoXCLai0jvawt9DavT3/1vM7px2bqRS5mNYGWYrb\nReOfTZPf6nkOKKLanlgC6MSxj50eQjJvVqon+CxJt9oSjtvE62Az2xEtTPpAbo60\nHcLakI/k9N6guxPn6bqA5xo0fnrpvI5Rs/8hKTECgYARIioc2Kec61A+5DmdNCTf\nP5gDI8B3kbPgb4t3/w5gppy5HiFHC1lL+BjevalUZ76jHtQQtt2NF4q7zCtEs9Y2\nM8xHB5kl2xofasYhv8/IXuag6/ZHfMOxOz/bXTMTM+eO5x9tEtZl1CW0p6jqotvv\nfH2MZaCD63FYGR81ZcuU3w==\n-----END PRIVATE KEY-----\n",
+  "client_email": "spellingbeebot@studied-stock-410006.iam.gserviceaccount.com",
+  "client_id": "101014434084077280224",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/spellingbeebot%40studied-stock-410006.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

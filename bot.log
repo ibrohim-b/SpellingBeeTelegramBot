@@ -1,0 +1,13 @@
+2024-04-12 22:46:26,755 INFO Start polling
+2024-04-12 22:46:27,185 INFO Run polling for bot @Perp_AI_Bot id=6783264679 - 'TEST BOT'
+2024-04-12 22:46:27,414 INFO User what_a_view 1380874424 started chat.
+2024-04-12 22:46:27,843 INFO Update id=766337988 is handled. Duration 430 ms by bot id=6783264679
+2024-04-12 22:46:30,157 INFO Update id=766337989 is handled. Duration 250 ms by bot id=6783264679
+2024-04-12 22:46:34,964 INFO User 1380874424 tries to pick a Word(word_id = 2, word = abet, word_translation = способствовать).
+2024-04-12 22:46:34,970 INFO User 1380874424 picked up Word(word_id = 2, word = abet, word_translation = способствовать) incorrectly.
+2024-04-12 22:46:35,253 INFO Update id=766337990 is handled. Duration 289 ms by bot id=6783264679
+2024-04-12 22:46:41,215 INFO User 1380874424 requested stats.
+2024-04-12 22:46:41,370 INFO Update id=766337991 is handled. Duration 157 ms by bot id=6783264679
+2024-04-12 22:46:48,873 WARNING Received SIGINT signal
+2024-04-12 22:46:48,874 INFO Polling stopped for bot @Perp_AI_Bot id=6783264679 - 'TEST BOT'
+2024-04-12 22:46:48,874 INFO Polling stopped

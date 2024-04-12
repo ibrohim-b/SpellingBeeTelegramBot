@@ -1,0 +1,28 @@
+#bot_token: '5928312466:AAFYrh0JhaDRma9nvyu-ALgt-v5wZDfJ_Dw'
+bot_token: '6783264679:AAHF41Ua7fPHN5i4k0dahrPKp-bj5VY1Eno'
+database_path: './words.db'
+
+messages:
+  welcome_message: |
+    🐝 Welcome to the Spelling Bee Telegram Bot! 🐝
+    📚 Prepare to spell your way to victory! 🚀 Type 'start' to embark on a word-tastic journey or 'help' for assistance.
+    May your letters align and your spelling prowess shine! 🌟 Let the spelling bee begin!
+  stats_message: |
+    📊 Spelling Bee Statistics 📊
+
+    You're making great progress in the Spelling Bee challenge! 🌟 Here's a quick overview:
+
+    🏆 Words Passed: {passed_words_count}
+    📚 Total Words in Database: {total_words_count}
+    🎯 Words Left: {total_words_left}
+
+    Keep up the fantastic work! Every word spelled brings you closer to mastery. 🚀🐝 #SpellingStats
+  congratulations_message: |
+    🎉 Congratulations! Correct Spelling! 🎉
+    Fantastic job! Your spelling is spot on. 🌟✨ Ready for the next challenge?
+    Keep up the excellent work! 🚀🐝 #SpellingSuccess
+  incorrect_spelling_message: |
+    🚨 Incorrect Spelling Alert! 🚨
+    It appears there might be a mistake in your spelling. Take a moment to review the audio and translation.
+    The word was <tg-spoiler>{word}</tg-spoiler>
+    Feel free to proceed when ready. 🎧📝
