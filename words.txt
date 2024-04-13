@@ -1,6 +1,0 @@
-cow
-laugh
-specify
-identify
-language
-protocol

@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 import yaml
 from aiogram import Bot, Dispatcher, types, F
@@ -17,17 +18,16 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 messages_config = config['messages']
 
-BOT_TOKEN = config.get('bot_token')
-DATABASE_PATH = config.get('database_path')
+BOT_TOKEN = os.environ.get("api_key")
 
 storage = MemoryStorage()
+db_sdk = DatabaseRepository()
 
 logging.basicConfig(level=logging.INFO, filename="bot.log", filemode="w",
                     format="%(asctime)s %(levelname)s %(message)s")
+
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=storage, bot=bot)
-
-db_sdk = DatabaseRepository()
 
 
 class UserState(StatesGroup):
