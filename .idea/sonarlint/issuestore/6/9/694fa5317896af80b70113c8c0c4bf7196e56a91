@@ -1,15 +1,0 @@
-
-npython:S107¢"QMethod "copy_message" has 14 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-upython:S107™"XMethod "create_invoice_link" has 21 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-upython:S107Á"XMethod "promote_chat_member" has 18 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-ppython:S107Ó"SMethod "send_animation" has 18 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-lpython:S107™"OMethod "send_audio" has 17 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-opython:S107à"RMethod "send_document" has 15 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-npython:S107É"QMethod "send_invoice" has 30 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-opython:S107±"RMethod "send_location" has 15 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-npython:S107—"QMethod "send_message" has 14 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-lpython:S107Ñ"OMethod "send_photo" has 14 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-kpython:S107‹"NMethod "send_poll" has 21 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-lpython:S107‹"OMethod "send_venue" has 17 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-lpython:S107Î"OMethod "send_video" has 19 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
-lpython:S107Î"OMethod "send_voice" has 14 parameters, which is greater than the 13 authorized.( Ðàþüÿÿÿÿ
