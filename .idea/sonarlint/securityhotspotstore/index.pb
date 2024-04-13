@@ -23,3 +23,8 @@ A
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 @
 requirements.txt,1/9/19359a61ae2446b51b549167b014da2fcf265768
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+8
+start.sh,9/d/9dcf658ee8180c343527e6fa4612975d22036004
