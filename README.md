@@ -50,4 +50,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 Let's spell our way to success! 🚀📝
+
 [Open Bot in Telegram](https://t.me/SpellingBeeInRussian_Bot)
