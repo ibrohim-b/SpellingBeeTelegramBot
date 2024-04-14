@@ -1,6 +1,8 @@
 import asyncio
 import logging
 import os
+from dotenv import load_dotenv
+
 
 import yaml
 from aiogram import Bot, Dispatcher, types, F
@@ -18,8 +20,8 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 messages_config = config['messages']
 
-BOT_TOKEN = os.environ.get("api_key")
-
+load_dotenv()
+BOT_TOKEN = os.getenv('api_key')
 storage = MemoryStorage()
 db_sdk = DatabaseRepository()
 

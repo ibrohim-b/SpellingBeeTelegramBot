@@ -1,5 +1,5 @@
-bot_token: '5928312466:AAFYrh0JhaDRma9nvyu-ALgt-v5wZDfJ_Dw'
-#bot_token: '6783264679:AAHF41Ua7fPHN5i4k0dahrPKp-bj5VY1Eno'
+#bot_token: '5928312466:AAFYrh0JhaDRma9nvyu-ALgt-v5wZDfJ_Dw'
+#test_bot_token: '6783264679:AAHF41Ua7fPHN5i4k0dahrPKp-bj5VY1Eno'
 
 messages:
   welcome_message: |
