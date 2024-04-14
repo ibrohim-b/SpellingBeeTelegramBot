@@ -3,7 +3,8 @@
 messages:
   welcome_message: |
     🐝 Welcome to the Spelling Bee Telegram Bot! 🐝
-    📚 Prepare to spell your way to victory! 🚀 Type 'start' to embark on a word-tastic journey or 'help' for assistance.
+    📚 Prepare to spell your way to victory!
+    🚀 Type 'start' to embark on a word-tastic journey or 'stats' to view your progress 📊
     May your letters align and your spelling prowess shine! 🌟 Let the spelling bee begin!
   stats_message: |
     📊 Spelling Bee Statistics 📊
@@ -33,6 +34,6 @@ messages:
     Keep up the excellent work! 🚀🐝 #SpellingSuccess
   incorrect_spelling_message: |
     🚨 Incorrect Spelling Alert! 🚨
-    It appears there might be a mistake in your spelling. Take a moment to review the audio and translation.
+    It appears there might be a mistake in your spelling.
     The word was <tg-spoiler>{word}</tg-spoiler>
     Feel free to proceed when ready. 🎧📝
