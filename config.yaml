@@ -1,4 +1,3 @@
-#bot_token: '5928312466:AAFYrh0JhaDRma9nvyu-ALgt-v5wZDfJ_Dw'
 #test_bot_token: '6783264679:AAHF41Ua7fPHN5i4k0dahrPKp-bj5VY1Eno'
 
 messages:
@@ -16,6 +15,18 @@ messages:
     🎯 Words Left: {total_words_left}
 
     Keep up the fantastic work! Every word spelled brings you closer to mastery. 🚀🐝 #SpellingStats
+
+  word_message: |
+    📚 Word Details 📚
+    
+    Here's what you need to know:
+    🔤 Translation: {translation}
+    🔊 Pronunciation: {phonetics_list}
+    📖 Meaning: {definition}
+    🔄 Synonyms: {synonyms_list}
+    🚫 Antonyms: {antonyms_list}
+    💡 Example Usage: {example_sentence}
+    Ready to spell? Let's go! 🎧📝
   congratulations_message: |
     🎉 Congratulations! Correct Spelling! 🎉
     Fantastic job! Your spelling is spot on. 🌟✨ Ready for the next challenge?

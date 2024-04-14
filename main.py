@@ -1,8 +1,6 @@
 import asyncio
 import logging
 import os
-from dotenv import load_dotenv
-
 
 import yaml
 from aiogram import Bot, Dispatcher, types, F
@@ -12,9 +10,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import FSInputFile
+from dotenv import load_dotenv
 
 from Word import Word
 from db_sdk import DatabaseRepository
+from dictionary_sdk import DictionaryClient, DictionaryWord
 
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
@@ -23,6 +23,8 @@ messages_config = config['messages']
 load_dotenv()
 BOT_TOKEN = os.getenv('api_key')
 storage = MemoryStorage()
+
+dictionary_sdk = DictionaryClient()
 db_sdk = DatabaseRepository()
 
 logging.basicConfig(level=logging.INFO, filename="bot.log", filemode="w",
@@ -60,10 +62,28 @@ async def start(message: types.Message, state: FSMContext):
 
 @dp.message(F.text.lower() == "pick a word" or UserState.start_training or UserState.picking_new_word)
 async def pick_a_word(message: types.Message, state: FSMContext):
-    word = db_sdk.get_random_word(str(message.from_user.id))
+    word: Word = db_sdk.get_random_word(str(message.from_user.id))
+    dictionary_word: DictionaryWord = dictionary_sdk.get_definition(word.word_spell)
     audio = FSInputFile(path=f"words_mp3/{word.word_spell}.mp3")
     translation = word.word_translation
-    await bot.send_voice(message.chat.id, audio, caption=translation, reply_markup=types.ReplyKeyboardRemove())
+    if not dictionary_word.phonetics:
+        phonetics_list = "No phonetics available"
+        definition = "No definition available"
+        example_sentence = "No example sentence available"
+        synonyms_list = "No synonyms available"
+        antonyms_list = "No antonyms available"
+    else:
+        phonetics_list = ", ".join(dictionary_word.phonetics)
+        definition = dictionary_word.meanings[0].definitions[0].definition
+        example_sentence = dictionary_word.meanings[0].definitions[0].example
+        synonyms_list = ", ".join(dictionary_word.meanings[0].synonyms)
+        antonyms_list = ", ".join(dictionary_word.meanings[0].antonyms)
+    caption = messages_config['word_message'].format(translation=translation, phonetics_list=phonetics_list,
+                                                     definition=definition,
+                                                     example_sentence=example_sentence,
+                                                     synonyms_list=synonyms_list,
+                                                     antonyms_list=antonyms_list)
+    await bot.send_voice(message.chat.id, audio, caption=caption, reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(UserState.spelling_a_word)
     await state.update_data(lastWord=word)
 
