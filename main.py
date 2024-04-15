@@ -49,7 +49,7 @@ class UserState(StatesGroup):
 @dp.message(Command("start"))
 async def start(message: types.Message, state: FSMContext):
     keyboard_markup = types.ReplyKeyboardMarkup(
-        keyboard=[[types.KeyboardButton(text="Pick a word")]],
+        keyboard=[[types.KeyboardButton(text="Pick a word")], [types.KeyboardButton(text="Stats")]],
         resize_keyboard=True,
         input_field_placeholder="Pick the action"
     )
@@ -125,7 +125,7 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
         await state.set_state(UserState.start_training)
 
 
-@dp.message(Command("stats"))
+@dp.message(Command("stats") or ("stats" and not StateFilter(UserState.spelling_a_word)))
 async def stats(message: types.Message):
     user_id = message.from_user.id
     passed_words = db_sdk.get_total_words_passed_count(user_id)
