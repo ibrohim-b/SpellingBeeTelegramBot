@@ -18,11 +18,11 @@ jobs:
           pkill SpellingBeeBot
       - name: Activate venv
         run: |
-          source .venv/bin/activate
+          source /home/python-projects/SpellingBeeTelegramBot/.venv/bin/activate
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          if  [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if  [ -f requirements.txt ]; then pip install -r /home/python-projects/SpellingBeeTelegramBot/requirements.txt; fi
       - name: Launch main.py via nohup
-        run : |
-          nohup python3 main.py >/dev/null 2>&1 &
+        run: |
+          nohup python3 /home/python-projects/SpellingBeeTelegramBot/main.py >/dev/null 2>&1 &
