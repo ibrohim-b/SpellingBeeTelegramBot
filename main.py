@@ -16,6 +16,10 @@ from Word import Word
 from db_sdk import DatabaseRepository
 from dictionary_sdk import DictionaryClient, DictionaryWord
 
+import setproctitle
+
+setproctitle.setproctitle("SpellingBeeBot")
+
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 messages_config = config['messages']
@@ -70,7 +74,8 @@ async def pick_a_word(message: types.Message, state: FSMContext):
         phonetics_list = ", ".join(dictionary_word.phonetics) if dictionary_word.phonetics else "No phonetics available"
         def_obj = dictionary_word.meanings[0].definitions[0]
         definition = def_obj.definition if def_obj.definition else "No definition available"
-        example_sentence = def_obj.example.replace(word.word_spell, "___") if def_obj.example else "No example sentence available"
+        example_sentence = def_obj.example.replace(word.word_spell,
+                                                   "___") if def_obj.example else "No example sentence available"
         synonyms_list = ", ".join(dictionary_word.meanings[0].synonyms) if dictionary_word.meanings[
             0].synonyms else "No synonyms available"
         antonyms_list = ", ".join(dictionary_word.meanings[0].antonyms) if dictionary_word.meanings[

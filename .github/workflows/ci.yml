@@ -13,10 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: kill last process
+        run: |
+          pkill SpellingBeeBot
       - name: Activate venv
         run: |
           source .venv/bin/activate
-
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
