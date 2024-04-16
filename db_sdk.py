@@ -1,3 +1,4 @@
+import datetime
 import os.path
 import sqlite3
 
@@ -13,7 +14,8 @@ class DatabaseRepository:
         )
         self.db = sqlite3.connect(os.path.join(self.path, DB_NAME))
 
-    def cursor(self):
+    @staticmethod
+    def cursor():
         path = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__)))
         return sqlite3.connect(os.path.join(path, DB_NAME)).cursor()
@@ -37,9 +39,10 @@ class DatabaseRepository:
 
     def create_user(self, user_id: int):
         cursor = self.cursor()
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with cursor.connection:
-            cursor.execute("INSERT OR IGNORE INTO users(user_id) VALUES (?)",
-                           (user_id,))
+            cursor.execute("INSERT OR IGNORE INTO users(user_id, created_at) VALUES (?,?)",
+                           (user_id,current_date,))
         cursor.connection.commit()
         cursor.connection.close()
 

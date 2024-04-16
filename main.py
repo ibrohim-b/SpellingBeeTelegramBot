@@ -125,7 +125,7 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
         await state.set_state(UserState.start_training)
 
 
-@dp.message(Command("stats") or ("stats" and not StateFilter(UserState.spelling_a_word)))
+@dp.message(Command("stats") or (("stats" or "Stats") and not StateFilter(UserState.spelling_a_word)))
 async def stats(message: types.Message):
     user_id = message.from_user.id
     passed_words = db_sdk.get_total_words_passed_count(user_id)
