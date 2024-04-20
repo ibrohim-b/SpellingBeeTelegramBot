@@ -123,6 +123,7 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
             text=messages_config["incorrect_spelling_message"].format(word=user_word.word_spell), parse_mode="HTML",
             reply_markup=keyboard_markup)
         await state.set_state(UserState.picking_new_word)
+        await pick_a_word()
 
 
 @dp.message(Command("stats") or (("stats" or "Stats") and not StateFilter(UserState.spelling_a_word)))
