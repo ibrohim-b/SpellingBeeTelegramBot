@@ -117,6 +117,8 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
             text=messages_config["congratulations_message"],
             reply_markup=keyboard_markup)
         await state.set_state(UserState.start_training)
+        await pick_a_word(message,state)
+
     else:
         logging.info(f"User {message.from_user.id} picked up {user_word} incorrectly.")
         await message.answer(
