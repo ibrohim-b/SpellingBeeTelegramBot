@@ -102,7 +102,7 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     user_word: Word = user_data['lastWord']
     keyboard_markup = types.ReplyKeyboardMarkup(
-        keyboard=[[types.KeyboardButton(text="Pick a word")]],
+        keyboard=[[types.KeyboardButton(text="Stats")]],
         resize_keyboard=True,
         input_field_placeholder="Pick the action"
     )
@@ -122,7 +122,7 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
         await message.answer(
             text=messages_config["incorrect_spelling_message"].format(word=user_word.word_spell), parse_mode="HTML",
             reply_markup=keyboard_markup)
-        await state.set_state(UserState.start_training)
+        await state.set_state(UserState.spelling_a_word)
 
 
 @dp.message(Command("stats") or (("stats" or "Stats") and not StateFilter(UserState.spelling_a_word)))
