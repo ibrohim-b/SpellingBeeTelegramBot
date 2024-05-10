@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 
+import setproctitle
 import yaml
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import StateFilter
@@ -15,8 +16,6 @@ from dotenv import load_dotenv
 from Word import Word
 from db_sdk import DatabaseRepository
 from dictionary_sdk import DictionaryClient, DictionaryWord
-
-import setproctitle
 
 setproctitle.setproctitle("SpellingBeeBot")
 
@@ -37,8 +36,15 @@ logging.basicConfig(level=logging.INFO, filename="bot.log", filemode="w",
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=storage, bot=bot)
 
+commands = ['start', 'cancel', 'stats']
+
 
 class UserState(StatesGroup):
+    # Auth
+    authorized = State()
+    registration = State()
+    entering_name = State()
+    # Training
     start_training = State()
     spelling_a_word = State()
     picking_new_word = State()
@@ -47,24 +53,60 @@ class UserState(StatesGroup):
 
 # Handle /start command
 @dp.message(Command("start"))
-async def start(message: types.Message, state: FSMContext):
-    keyboard_markup = types.ReplyKeyboardMarkup(
-        keyboard=[[types.KeyboardButton(text="Pick a word")], [types.KeyboardButton(text="Stats")]],
-        resize_keyboard=True,
-        input_field_placeholder="Pick the action"
-    )
-    # Insert user into the database if not exists
-    db_sdk.create_user(message.from_user.id)
+async def authorize(message: types.Message, state: FSMContext):
+    if db_sdk.user_exists(message.from_user.id) or db_sdk.user_has_name(message.from_user.id):
+        await state.set_state(UserState.authorized)
+        await start(message)
+    else:
+        await state.set_state(UserState.registration)
+        await registration(message, state)
 
-    logging.info(f"User {message.from_user.username} {message.from_user.id} started chat.")
+
+async def registration(message: types.Message, state: FSMContext):
+    if not db_sdk.user_exists(message.from_user.id) or not db_sdk.user_has_name(message.from_user.id):
+        await message.answer(
+            text=messages_config['registration_message'],
+        )
+        await state.set_state(UserState.entering_name)
+
+
+@dp.message(StateFilter(UserState.entering_name))
+async def entering_name(message: types.Message, state: FSMContext):
+    if not db_sdk.user_exists(message.from_user.id):
+        db_sdk.create_user(message.from_user.id, message.text)
+    elif not db_sdk.user_has_name(message.from_user.id):
+        db_sdk.update_user_name(message.from_user.id, message.text)
+    await state.set_state(UserState.authorized)
+    await start(message)
+
+
+async def start(message: types.Message):
+    keyboard = [[types.InlineKeyboardButton(text="Start training",
+                                            callback_data="start_training"),
+                 types.InlineKeyboardButton(text="Statistics",
+                                            callback_data="statistics")]]
+    keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
     await message.answer(
         text=messages_config['welcome_message'],
-        reply_markup=keyboard_markup
+        reply_markup=keyboard_markup,
     )
-    await state.set_state(UserState.start_training)
 
 
-@dp.message(F.text.lower() == "pick a word" or UserState.start_training or UserState.picking_new_word)
+@dp.message(Command("cancel"))
+async def cancel(message: types.Message, state: FSMContext):
+    await state.set_state(None)
+    await message.answer(
+        "canceled"
+    )
+    await authorize(message, state)
+
+
+@dp.callback_query(F.data == "start_training")
+async def pick_a_word(callback: types.CallbackQuery, state: FSMContext):
+    await pick_a_word(callback.message, state)
+
+
+@dp.message(StateFilter(UserState.picking_new_word) or StateFilter(UserState.spelling_a_word))
 async def pick_a_word(message: types.Message, state: FSMContext):
     word: Word = db_sdk.get_random_word(str(message.from_user.id))
     dictionary_word: DictionaryWord | None = dictionary_sdk.get_definition(word.word_spell)
@@ -101,11 +143,6 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
     user_id = message.from_user.id
     user_word: Word = user_data['lastWord']
-    keyboard_markup = types.ReplyKeyboardMarkup(
-        keyboard=[[types.KeyboardButton(text="Stats")]],
-        resize_keyboard=True,
-        input_field_placeholder="Pick the action"
-    )
     logging.info(f"User {message.from_user.id} tries to pick a {user_word}.")
 
     db_sdk.add_suggestion(user_word.word_id, user_id)
@@ -114,22 +151,21 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
         db_sdk.update_suggestion(user_word.word_id, user_id, 1)
         logging.info(f"User {message.from_user.id} picked up {user_word} correctly.")
         await message.answer(
-            text=messages_config["congratulations_message"],
-            reply_markup=keyboard_markup)
+            text=messages_config["congratulations_message"], )
         await state.set_state(UserState.start_training)
-        await pick_a_word(message,state)
+        await pick_a_word(message=message, state=state)
 
     else:
         logging.info(f"User {message.from_user.id} picked up {user_word} incorrectly.")
         await message.answer(
-            text=messages_config["incorrect_spelling_message"].format(word=user_word.word_spell), parse_mode="HTML",
-            reply_markup=keyboard_markup)
+            text=messages_config["incorrect_spelling_message"].format(word=user_word.word_spell), parse_mode="HTML", )
         await state.set_state(UserState.picking_new_word)
-        await pick_a_word(message,state)
+        await pick_a_word(message=message, state=state)
 
 
-@dp.message(Command("stats") or (("stats" or "Stats") and not StateFilter(UserState.spelling_a_word)))
-async def stats(message: types.Message):
+@dp.callback_query(F.data == "statistics")
+async def stats(callback: types.CallbackQuery):
+    message = callback.message
     user_id = message.from_user.id
     passed_words = db_sdk.get_total_words_passed_count(user_id)
     total_words = db_sdk.get_total_words_count()

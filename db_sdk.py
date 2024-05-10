@@ -37,12 +37,32 @@ class DatabaseRepository:
         cursor.connection.close()
         return word
 
-    def create_user(self, user_id: int):
+    def user_exists(self, user_id: int):
+        cursor = self.cursor()
+        with cursor.connection:
+            cursor.execute("""SELECT * FROM users WHERE user_id = ? ;""", (user_id,))
+            row = cursor.fetchone()
+            user_exists = row is not None
+        cursor.connection.commit()
+        cursor.connection.close()
+        return user_exists
+
+    def user_has_name(self, user_id: int):
+        cursor = self.cursor()
+        with cursor.connection:
+            cursor.execute("""SELECT name FROM users WHERE user_id = ? ;""", (user_id,))
+            row = cursor.fetchone()
+            user_name_exists = row is not None
+        cursor.connection.commit()
+        cursor.connection.close()
+        return user_name_exists
+
+    def create_user(self, user_id: int, name: str):
         cursor = self.cursor()
         current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with cursor.connection:
-            cursor.execute("INSERT OR IGNORE INTO users(user_id, created_at) VALUES (?,?)",
-                           (user_id,current_date,))
+            cursor.execute("INSERT OR IGNORE INTO users(user_id, name,created_at) VALUES (?,?,?)",
+                           (user_id, name, current_date,))
         cursor.connection.commit()
         cursor.connection.close()
 
@@ -91,3 +111,15 @@ class DatabaseRepository:
             cursor.execute("SELECT COUNT(*) FROM words")
             row = cursor.fetchone()
             return row[0]
+
+    def update_user_name(self, user_id: int, user_name):
+        cursor = self.cursor()
+        with cursor.connection:
+            cursor.execute("UPDATE users SET name = ? WHERE user_id = ?",
+                           (user_name, user_id))
+
+
+if __name__ == '__main__':
+    db_sdk = DatabaseRepository()
+    print(db_sdk.user_exists(1380874424))
+    print(db_sdk.user_has_name(1380874424))

@@ -11,6 +11,7 @@ This Telegram bot is designed to help users improve their spelling skills in a f
 - **Feedback System:** Users receive instant feedback on their spelling attempts.
 - **Statistics Tracking:** Users can check their progress and see how many words they've spelled correctly compared to the total number of words available.
 
+[//]: # (- **Ranking System:** Users can )
 ## How to Use
 
 1. Start the bot by initiating a conversation or typing `/start`.

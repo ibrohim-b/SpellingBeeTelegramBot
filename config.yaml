@@ -1,10 +1,16 @@
 #test_bot_token: '6783264679:AAHF41Ua7fPHN5i4k0dahrPKp-bj5VY1Eno'
 
 messages:
+  registration_message: |
+    📝 Registration 📝
+    To personalize your Spelling Bee experience, please enter your name below.
+    🖊️ Once you've entered your name, you'll be all set to embark on your spelling journey!
+    Just type your name and hit 'send.' Let's get started! 🚀🐝
+
   welcome_message: |
     🐝 Welcome to the Spelling Bee Telegram Bot! 🐝
     📚 Prepare to spell your way to victory!
-    🚀 Type 'start' to embark on a word-tastic journey or 'stats' to view your progress 📊
+    🚀 Type 'Start training' to embark on a word-tastic journey or 'stats' to view your progress 📊
     May your letters align and your spelling prowess shine! 🌟 Let the spelling bee begin!
   stats_message: |
     📊 Spelling Bee Statistics 📊
