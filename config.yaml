@@ -1,4 +1,3 @@
-#test_bot_token: '6783264679:AAHF41Ua7fPHN5i4k0dahrPKp-bj5VY1Eno'
 
 messages:
   registration_message: |
@@ -43,3 +42,6 @@ messages:
     It appears there might be a mistake in your spelling.
     The word was <tg-spoiler>{word}</tg-spoiler>
     Feel free to proceed when ready. 🎧📝
+
+  something_went_wrong: |
+    "⚠️ Oops! Something went wrong. Please try again later or contact with (developer)[@what_a_view]. 🐝"
