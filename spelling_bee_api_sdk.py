@@ -38,7 +38,7 @@ class SpellingBeeSdk:
         requests.put(f'{self.base_url}/users/update_name?user_id={user_id}&user_name={user_name}')
 
     def add_suggestion(self, word_id: int, user_id: int):
-        requests.put(f'{self.base_url}/suggestions/add_suggestion?word_id={word_id}&user_id={user_id}')
+        requests.post(f'{self.base_url}/suggestions/add_suggestion?word_id={word_id}&user_id={user_id}')
 
     def update_suggestion(self, word_id: int, user_id: int, passed: int):
         requests.put(
@@ -55,6 +55,13 @@ class SpellingBeeSdk:
         if response.status_code == 200:
             return int(response.json())
         return 0
+
+    # get top list of users by words passed count
+    def get_top_list_of_users(self):
+        response = requests.get(f"{self.base_url}/statistics/get_top_list_of_users")
+        if response.status_code == 200:
+            return [User(**user) for user in response.json()]
+        return []
 
 
 @dataclass
@@ -95,6 +102,12 @@ class Word:
 
     def __post_init__(self):
         self.extra_info = ExtraInfo(**self.extra_info) if self.extra_info else None
+
+@dataclass
+class User:
+    user_id: int
+    user_name: str
+    passed:int
 
 
 if __name__ == '__main__':

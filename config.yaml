@@ -9,8 +9,13 @@ messages:
   welcome_message: |
     🐝 Welcome to the Spelling Bee Telegram Bot! 🐝
     📚 Prepare to spell your way to victory!
-    🚀 Type 'Start training' to embark on a word-tastic journey or 'stats' to view your progress 📊
+    🚀 Click 'Start training' to embark on a word-tastic journey or 'stats' to process to stats menu 📊
     May your letters align and your spelling prowess shine! 🌟 Let the spelling bee begin!
+
+  stats_menu_message : |
+    📊 Statistics Menu 📊
+
+    Choose an action:
   stats_message: |
     📊 Spelling Bee Statistics 📊
 
@@ -21,7 +26,13 @@ messages:
     🎯 Words Left: {total_words_left}
 
     Keep up the fantastic work! Every word spelled brings you closer to mastery. 🚀🐝 #SpellingStats
-
+  leaders_board_message: |
+    🏆 Leaderboard 🏆
+    
+    {leaders_board_list}
+    Keep up the great spelling! 🐝
+  leaders_board_list_item: |
+    {place}.{user_name} - {words_count} words
   word_message: |
     📚 Word Details 📚
     
@@ -44,4 +55,4 @@ messages:
     Feel free to proceed when ready. 🎧📝
 
   something_went_wrong: |
-    "⚠️ Oops! Something went wrong. Please try again later or contact with (developer)[@what_a_view]. 🐝"
+    ⚠️ Oops! Something went wrong. Please try again later or contact with <a href="t.me/@what_a_view">developer</a>. 🐝"

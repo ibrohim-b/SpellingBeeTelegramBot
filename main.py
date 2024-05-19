@@ -58,8 +58,9 @@ async def authorize(message: types.Message, state: FSMContext):
         else:
             await state.set_state(UserState.registration)
             await registration(message, state)
-    except Exception:
-        await something_went_wrong(message)
+
+    except Exception as exception:
+        logging.error(exception)
 
 
 async def registration(message: types.Message, state: FSMContext):
@@ -70,8 +71,8 @@ async def registration(message: types.Message, state: FSMContext):
                 text=messages_config['registration_message'],
             )
             await state.set_state(UserState.entering_name)
-    except Exception:
-        await something_went_wrong(message)
+    except Exception as exception:
+        logging.error(exception)
 
 
 @dp.message(StateFilter(UserState.entering_name))
@@ -83,15 +84,29 @@ async def entering_name(message: types.Message, state: FSMContext):
             spelling_bee_sdk.update_user_name(message.from_user.id, message.text)
         await state.set_state(UserState.authorized)
         await start(message)
-    except Exception:
-        await something_went_wrong(message)
+    except Exception as exception:
+        logging.error(exception)
+
+
+@dp.callback_query(F.data == "main_menu")
+async def main_menu(callback: types.CallbackQuery):
+    message = callback.message
+    keyboard = [[types.InlineKeyboardButton(text="Start training",
+                                            callback_data="start_training"),
+                 types.InlineKeyboardButton(text="Statistics",
+                                            callback_data="statistics_menu")]]
+    keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
+    await message.edit_text(
+        text=messages_config['welcome_message'],
+        reply_markup=keyboard_markup,
+    )
 
 
 async def start(message: types.Message):
     keyboard = [[types.InlineKeyboardButton(text="Start training",
                                             callback_data="start_training"),
                  types.InlineKeyboardButton(text="Statistics",
-                                            callback_data="statistics")]]
+                                            callback_data="statistics_menu")]]
     keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
     await message.answer(
         text=messages_config['welcome_message'],
@@ -99,24 +114,19 @@ async def start(message: types.Message):
     )
 
 
-@dp.message(Command("cancel") and StateFilter(UserState.authorized))
-async def cancel(message: types.Message, state: FSMContext):
-    await state.set_state(None)
-    await message.answer(
-        "canceled"
-    )
-    await authorize(message, state)
-
-
 @dp.callback_query(F.data == "start_training")
 async def pick_a_word(callback: types.CallbackQuery, state: FSMContext):
-    await pick_a_word(callback.message, state)
+    await _pick_a_word(callback.message, state, user_id=callback.from_user.id)
 
 
 @dp.message(StateFilter(UserState.picking_new_word) or StateFilter(UserState.spelling_a_word))
 async def pick_a_word(message: types.Message, state: FSMContext):
+    await _pick_a_word(message, state, user_id=message.from_user.id)
+
+
+async def _pick_a_word(message: types.Message, state: FSMContext, user_id: int):
     try:
-        word: Word = spelling_bee_sdk.get_random_word(message.from_user.id)
+        word: Word = spelling_bee_sdk.get_random_word(user_id)
         extra_info = word.extra_info
         translation = word.word_translation
         audio: InputFile
@@ -146,56 +156,128 @@ async def pick_a_word(message: types.Message, state: FSMContext):
         await bot.send_voice(message.chat.id, audio, caption=caption, reply_markup=types.ReplyKeyboardRemove())
         await state.set_state(UserState.spelling_a_word)
         await state.update_data(lastWord=word)
-    except Exception:
-        await something_went_wrong(message)
+
+    except Exception as exception:
+        logging.error(exception)
 
 
 @dp.message(StateFilter(UserState.spelling_a_word))
 async def spelling_a_word(message: types.Message, state: FSMContext):
-    user_data = await state.get_data()
-    user_id = message.from_user.id
-    user_word: Word = user_data['lastWord']
-    logging.info(f"User {message.from_user.id} tries to pick a {user_word}.")
-
-    spelling_bee_sdk.add_suggestion(user_word.word_id, user_id)
-
-    if message.text.lower().strip() == user_word.word_spell.lower().strip():
-        spelling_bee_sdk.update_suggestion(user_word.word_id, user_id, 1)
-        logging.info(f"User {message.from_user.id} picked up {user_word} correctly.")
-        await message.answer(
-            text=messages_config["congratulations_message"], )
-        await state.set_state(UserState.start_training)
-        await pick_a_word(message=message, state=state)
-
-    else:
-        logging.info(f"User {message.from_user.id} picked up {user_word} incorrectly.")
-        await message.answer(
-            text=messages_config["incorrect_spelling_message"].format(word=user_word.word_spell), parse_mode="HTML", )
-        await state.set_state(UserState.picking_new_word)
-        await pick_a_word(message=message, state=state)
-
-
-@dp.callback_query(F.data == "statistics")
-async def stats(callback: types.CallbackQuery):
     try:
-        message = callback.message
+        user_data = await state.get_data()
+        user_word = user_data['lastWord']
         user_id = message.from_user.id
-        passed_words = spelling_bee_sdk.get_total_words_passed_count(user_id)
-        total_words = spelling_bee_sdk.get_total_words_count()
-        total_words_left = total_words - passed_words
-        logging.info(f"User {message.from_user.id} requested stats.")
-        await message.answer(
-            text=messages_config["stats_message"].format(passed_words_count=passed_words, total_words_count=total_words,
-                                                         total_words_left=total_words_left),
-            parse_mode="HTML")
-    except Exception:
+        logging.info(f"User {message.from_user.id} tries to pick a {user_word}.")
+
+        spelling_bee_sdk.add_suggestion(user_word.word_id, user_id)
+
+        if message.text.lower().strip() == user_word.word_spell.lower().strip():
+            spelling_bee_sdk.update_suggestion(user_word.word_id, user_id, 1)
+            logging.info(f"User {message.from_user.id} picked up {user_word} correctly.")
+            await message.answer(
+                text=messages_config["congratulations_message"], )
+            await state.set_state(UserState.start_training)
+            await pick_a_word(message=message, state=state)
+
+        else:
+            logging.info(f"User {message.from_user.id} picked up {user_word} incorrectly.")
+            await message.answer(
+                text=messages_config["incorrect_spelling_message"].format(word=user_word.word_spell),
+                parse_mode="HTML", )
+            await state.set_state(UserState.picking_new_word)
+            await pick_a_word(message=message, state=state)
+
+    except Exception as exception:
+        logging.error(exception)
+        await something_went_wrong(message)
+
+
+@dp.callback_query(F.data == "statistics_menu")
+async def stats_menu(callback: types.CallbackQuery):
+    try:
+        keyboard = [[types.InlineKeyboardButton(text="View your stats",
+                                                callback_data="view_statistics"),
+                     types.InlineKeyboardButton(text="Leaders board",
+                                                callback_data="view_leaders_board")],
+                    [types.InlineKeyboardButton(text="Back to main menu",
+                                                callback_data="main_menu")]
+                    ]
+        keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
+        message = callback.message
+        logging.info(f"User {message.from_user.id} came into stats menu.")
+        await message.edit_text(
+            text=messages_config["stats_menu_message"],
+            parse_mode="HTML",
+            reply_markup=keyboard_markup)
+    except Exception as exception:
+        logging.error(exception)
         await something_went_wrong(callback.message)
+
+
+@dp.callback_query(F.data == "view_statistics")
+async def view_statistics(callback: types.CallbackQuery):
+    try:
+        user_id = callback.from_user.id
+        keyboard = [[types.InlineKeyboardButton(text="Back",
+                                                callback_data="statistics_menu")]]
+        keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
+        message = callback.message
+        words_passed = spelling_bee_sdk.get_total_words_passed_count(user_id=user_id)
+        total_words = spelling_bee_sdk.get_total_words_count()
+        words_left = total_words - words_passed
+        logging.info(f"User {message.from_user.id} requested stats.")
+        await message.edit_text(
+            text=messages_config["stats_message"].format(passed_words_count=words_passed,
+                                                         total_words_count=total_words,
+                                                         total_words_left=words_left),
+            parse_mode="HTML",
+            reply_markup=keyboard_markup
+        )
+    except Exception as exception:
+        logging.error(exception)
+        await something_went_wrong(callback.message)
+
+
+@dp.callback_query(F.data == "view_leaders_board")
+async def view_leaders_board(callback: types.CallbackQuery):
+    try:
+        keyboard = [[types.InlineKeyboardButton(text="Back",
+                                                callback_data="statistics_menu")]]
+        keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
+        message = callback.message
+        logging.info(f"User {message.from_user.id} came into leaders board.")
+        leaders_board = spelling_bee_sdk.get_top_list_of_users()
+        leaders_board_list = ''
+        for i, user in enumerate(leaders_board):
+            leaders_board_list += messages_config["leaders_board_list_item"].format(
+                place=i + 1,
+                user_name=user.user_name,
+                words_count=user.passed
+            )
+
+        await message.edit_text(
+            text=messages_config["leaders_board_message"].format(leaders_board_list=leaders_board_list),
+            parse_mode="HTML", reply_markup=keyboard_markup)
+
+    except Exception as exception:
+        logging.error(exception)
+        await something_went_wrong(callback.message)
+
+
+@dp.message(Command("cancel") and (StateFilter(UserState.start_training) or StateFilter(UserState.authorized)))
+async def cancel(message: types.Message, state: FSMContext):
+    await state.set_state(None)
+    await message.answer(
+        "canceled"
+    )
+    await authorize(message, state)
 
 
 @dp.message()
 async def something_went_wrong(message: types.Message):
     await message.answer(
         text=messages_config["something_went_wrong"],
+        parse_mode="HTML"
     )
 
 
