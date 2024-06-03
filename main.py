@@ -10,7 +10,7 @@ from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import FSInputFile, InputFile
+from aiogram.types import FSInputFile, InputFile, Update
 from dotenv import load_dotenv
 
 from spelling_bee_api_sdk import Word, SpellingBeeSdk
@@ -279,6 +279,12 @@ async def something_went_wrong(message: types.Message):
         text=messages_config["something_went_wrong"],
         parse_mode="HTML"
     )
+
+
+@dp.error()
+async def error_handler(update: Update):
+    logging.error(update.exception)
+    await update.update.message.answer(messages_config["something_went_wrong"])
 
 
 async def main():

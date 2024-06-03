@@ -90,6 +90,7 @@ class ExtraInfo:
     def __post_init__(self):
         self.meanings = [Meaning(**meaning) for meaning in self.meanings]
 
+
 @dataclass
 class Word:
     word_id: int
@@ -103,11 +104,12 @@ class Word:
     def __post_init__(self):
         self.extra_info = ExtraInfo(**self.extra_info) if self.extra_info else None
 
+
 @dataclass
 class User:
     user_id: int
     user_name: str
-    passed:int
+    passed: int
 
 
 if __name__ == '__main__':

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spelling Bee Demo</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="card" style="width: 25rem; padding: 0">
+    <div class="card-body" style="padding: 0">
+        <h5 class="card-title">
+            <input style="border-left: none ;border-right: none; border-top:none;border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
+                   class="form-control form-control-lg" type="text" placeholder=" Ready to spell? Let's go! 🎧📝"
+                   aria-label=".form-control-lg example">
+        </h5>
+        <div style="margin: 16px">
+            <p class="card-text"> 🔤 Translation:
+            <p id="translation"></p> </p>
+            <p class="card-text"> 🔊 Pronunciation:
+            <p id="pronunciation"></p></p>
+            <p class="card-text"> 📖 Meaning:
+            <p id="meaning"></p></p>
+            <p class="card-text"> 🔄 Synonyms:
+            <p id="synonyms"></p></p>
+            <p class="card-text"> 🚫 Antonyms:
+            <p id="antonyms"></p></p>
+            <p class="card-text"> 💡 Example Usage:
+            <p id="example_usage"></p> </p>
+            <p class="card-text"></p>
+        </div>
+        <div style="margin: 0 16px 16px;" class="d-flex align-items-center justify-content-center">
+            <button type="button" id="play-button" style="margin-right: 8px "
+                    class="btn btn-primary ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-play-fill" viewBox="0 0 16 16">
+                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+                </svg>
+                Play
+            </button>
+            with
+            <select class="form-select" style="width: auto; margin-left: 8px" aria-label="Default select example">
+                <option selected>Voice</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
