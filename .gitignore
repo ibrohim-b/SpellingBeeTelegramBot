@@ -1,3 +1,5 @@
 .env
 .idea
-
+nohup.out
+.venv
+bot.log
