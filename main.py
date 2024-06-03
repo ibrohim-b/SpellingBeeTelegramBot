@@ -49,7 +49,7 @@ class UserState(StatesGroup):
 
 
 # Handle /start command
-@dp.message(Command("start"))
+@dp.message(Command(commands=["start", "stop"]))
 async def authorize(message: types.Message, state: FSMContext):
     try:
         if spelling_bee_sdk.user_exists(message.from_user.id) or spelling_bee_sdk.user_has_name(message.from_user.id):
@@ -86,6 +86,11 @@ async def entering_name(message: types.Message, state: FSMContext):
         await start(message)
     except Exception as exception:
         logging.error(exception)
+
+
+@dp.message(Command("stats"))
+async def stats_menu(message: types.Message):
+    await _stats_menu(message)
 
 
 @dp.callback_query(F.data == "main_menu")
@@ -194,48 +199,45 @@ async def spelling_a_word(message: types.Message, state: FSMContext):
 
 @dp.callback_query(F.data == "statistics_menu")
 async def stats_menu(callback: types.CallbackQuery):
-    try:
-        keyboard = [[types.InlineKeyboardButton(text="View your stats",
-                                                callback_data="view_statistics"),
-                     types.InlineKeyboardButton(text="Leaders board",
-                                                callback_data="view_leaders_board")],
-                    [types.InlineKeyboardButton(text="Back to main menu",
-                                                callback_data="main_menu")]
-                    ]
-        keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
-        message = callback.message
-        logging.info(f"User {message.from_user.id} came into stats menu.")
-        await message.edit_text(
-            text=messages_config["stats_menu_message"],
-            parse_mode="HTML",
-            reply_markup=keyboard_markup)
-    except Exception as exception:
-        logging.error(exception)
-        await something_went_wrong(callback.message)
+    await _stats_menu(callback.message)
 
 
-@dp.callback_query(F.data == "view_statistics")
-async def view_statistics(callback: types.CallbackQuery):
+async def _stats_menu(message: types.Message):
     try:
-        user_id = callback.from_user.id
-        keyboard = [[types.InlineKeyboardButton(text="Back",
-                                                callback_data="statistics_menu")]]
+        user_id = message.from_user.id
+        keyboard = [[types.InlineKeyboardButton(text="Leaders board",
+                                                callback_data="view_leaders_board"),
+                     types.InlineKeyboardButton(text="Back",
+                                                callback_data="main_menu")]]
         keyboard_markup = types.InlineKeyboardMarkup(inline_keyboard=keyboard)
-        message = callback.message
         words_passed = spelling_bee_sdk.get_total_words_passed_count(user_id=user_id)
         total_words = spelling_bee_sdk.get_total_words_count()
         words_left = total_words - words_passed
         logging.info(f"User {message.from_user.id} requested stats.")
-        await message.edit_text(
-            text=messages_config["stats_message"].format(passed_words_count=words_passed,
-                                                         total_words_count=total_words,
-                                                         total_words_left=words_left),
-            parse_mode="HTML",
-            reply_markup=keyboard_markup
-        )
+        try:
+            await message.edit_text(
+                text=messages_config["stats_message"].format(passed_words_count=words_passed,
+                                                             total_words_count=total_words,
+                                                             total_words_left=words_left),
+                parse_mode="HTML",
+                reply_markup=keyboard_markup
+            )
+        except:
+            await message.answer(
+                text=messages_config["stats_message"].format(passed_words_count=words_passed,
+                                                             total_words_count=total_words,
+                                                             total_words_left=words_left),
+                parse_mode="HTML",
+                reply_markup=keyboard_markup
+            )
     except Exception as exception:
         logging.error(exception)
-        await something_went_wrong(callback.message)
+        await something_went_wrong(message)
+
+
+@dp.callback_query(F.data == "view_statistics")
+async def view_statistics(callback: types.CallbackQuery):
+    pass
 
 
 @dp.callback_query(F.data == "view_leaders_board")
@@ -262,15 +264,6 @@ async def view_leaders_board(callback: types.CallbackQuery):
     except Exception as exception:
         logging.error(exception)
         await something_went_wrong(callback.message)
-
-
-@dp.message(Command("cancel") and (StateFilter(UserState.start_training) or StateFilter(UserState.authorized)))
-async def cancel(message: types.Message, state: FSMContext):
-    await state.set_state(None)
-    await message.answer(
-        "canceled"
-    )
-    await authorize(message, state)
 
 
 @dp.message()

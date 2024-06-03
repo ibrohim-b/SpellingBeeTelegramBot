@@ -43,6 +43,7 @@ messages:
     🚫 Antonyms: {antonyms_list}
     💡 Example Usage: {example_sentence}
     Ready to spell? Let's go! 🎧📝
+    You can /stop whenever you want
   congratulations_message: |
     🎉 Congratulations! Correct Spelling! 🎉
     Fantastic job! Your spelling is spot on. 🌟✨

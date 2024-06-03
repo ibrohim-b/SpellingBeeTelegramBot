@@ -3,3 +3,4 @@
 nohup.out
 .venv
 bot.log
+__pycache__
