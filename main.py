@@ -204,7 +204,7 @@ async def stats_menu(callback: types.CallbackQuery):
 
 async def _stats_menu(message: types.Message):
     try:
-        user_id = message.from_user.id
+        user_id = message.chat.id
         keyboard = [[types.InlineKeyboardButton(text="Leaders board",
                                                 callback_data="view_leaders_board"),
                      types.InlineKeyboardButton(text="Back",
